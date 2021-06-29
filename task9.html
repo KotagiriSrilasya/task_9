@@ -1,0 +1,96 @@
+<script>
+        function lw()
+        {
+                var i = document.getElementById("in1").value
+                if (i.split(" ").includes("create"))
+                {
+                if(i.split(" ").includes("pod"))
+                {
+                var pod=prompt("enter pod name");
+                var image=prompt("enter image name");
+                i="kubectl run "+pod+" --image "+image;
+                }
+                else if(i.split(" ").includes("deployment"))
+                {
+                var pod=prompt("enter pod name");
+                var image=prompt("enter image name");
+                i="kubectl create deployment "+pod+" --image "+image;
+                }
+                }
+                else if(i.split(" ").includes("expose"))
+                {
+                var pod=prompt("enter pod name");
+                var port=prompt("enter port number");
+                i="kubectl expose deployment "+pod+" --port="+port;
+                }
+                else if(i.split(" ").includes("scale"))
+                {
+                var pod=prompt("enter pod name");
+                var replica=prompt("enter number of replicas");
+                i="kubectl scale deployment "+pod+" --replicas="+replica;
+                }
+                else if(i.split(" ").includes("delete"))
+                {
+                var pod=prompt("enter pod name");
+                if(pod.localeCompare("all")==0)
+                {
+                i="kubectl delete all --all";
+                }
+                else
+                {
+                i="kubectl delete pod "+pod;
+                }
+                }
+                else if(i.split(" ").includes("get"))
+                {
+                if(i.split(" ").includes("pods"))
+                                {
+                i="kubectl get pods";
+                }
+                else
+                {
+                i="kubectl get deployments";
+                }
+                }
+                var xhr=new XMLHttpRequest(); 
+                xhr.open("GET","http://192.168.0.106/cgi-bin/task8.py?x="+i,true)
+                xhr.send()
+                xhr.onload=function()
+                {
+                        var output=xhr.responseText;
+                        document.getElementById("d1").innerHTML=output
+                }
+        }
+</script>
+<html>
+<head>
+    <title>kubernetes</title>
+    <style>
+            body,html {
+                height:100%;
+                margin: 0;
+                }
+        .bg {
+                background-image:url("https://download.logo.wine/logo/Kubernetes/Kubernetes-Logo.wine.png");
+                height:100%;
+                background-position:center;
+                background-repeat:no-repeat;
+                background-size:cover;
+                }
+
+        </style>
+</head>
+<body style="background-color:lightgrey;">
+<div class="bg">
+<center>
+<h1 style="font-size:7vw;">kubernetes</h1>
+<label style="font-size:2vw;">[root@localhost ~]#</label><input style="font-size:1.5vw;" align="middle" id="in1"/>
+</br>
+<pre>
+<div id="d1" class="f" style="font-size:2vw;">output</div>
+</pre>
+<button style="font-size:1.5vw;" onclick="lw()">click</button>
+</center>
+</div>
+</body>
+</html>
